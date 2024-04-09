@@ -29,11 +29,13 @@ This project implements a microservices-based system for course selection in a u
 - [ ] It will have a UI where students can enroll to courses
 - [ ] Students will be able to see course capacities in real time (?)
 - [ ] Saga pattern will be implemented for the transactions
+- [ ] Authorization and authentication will be implemented
 
 ### Professor Service
 - [ ] Professor information will be stored in a PostgreSQL database
 - [ ] It will consume Kafka and update courses based on the CRUD operations on the other services
 - [ ] It will have a UI where professors can add, update or drop a course
+- [ ] Authorization and authentication will be implemented
 
 ### Notification Service
 - [ ] Students will be notified if one of their selected course is dropped
