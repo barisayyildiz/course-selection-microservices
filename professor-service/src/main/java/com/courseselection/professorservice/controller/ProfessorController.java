@@ -1,5 +1,6 @@
 package com.courseselection.professorservice.controller;
 
+import com.courseselection.professorservice.dtos.CourseCreationDto;
 import com.courseselection.professorservice.dtos.CourseRequestDto;
 import com.courseselection.professorservice.dtos.UpdateProfessorRequestDto;
 import com.courseselection.professorservice.dtos.UserProfileResponseDTO;
@@ -48,8 +49,11 @@ public class ProfessorController {
     }
 
     @PostMapping("/course")
-    public void addCourse() {
-//        TODO: add a new course
+    public ResponseEntity<CourseCreationDto> addCourse(
+            @RequestBody CourseCreationDto courseCreationDto
+    ) {
+        professorService.createCourse(courseCreationDto);
+        return new ResponseEntity<>(courseCreationDto, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/course/{id}")
