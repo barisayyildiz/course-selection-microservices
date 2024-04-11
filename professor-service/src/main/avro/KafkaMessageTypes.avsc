@@ -1,0 +1,41 @@
+[
+  {
+    "namespace": "com.courseselection.kafkatypes",
+    "name": "Course",
+    "type": "record",
+    "fields": [
+      {
+        "name": "id",
+        "type": ["int", "null"]
+      }, {
+        "name": "name",
+        "type": "string"
+      }, {
+        "name": "code",
+        "type": "string"
+      }, {
+        "name": "professorId",
+        "type": "int"
+      }, {
+        "name": "capacity",
+        "type": "int"
+      }, {
+        "name": "enrolled",
+        "type": ["int", "null"]
+      }
+    ]
+  },
+  {
+    "namespace": "com.courseselection.kafkatypes",
+    "name": "CourseOperation",
+    "type": "record",
+    "fields": [
+      {
+        "name": "operation", "type": "string"
+      }, {
+        "name": "course",
+        "type": "com.courseselection.kafkatypes.Course"
+      }
+    ]
+  }
+]

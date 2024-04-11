@@ -1,5 +1,7 @@
 package com.courseselection.professorservice.service;
 
+import com.courseselection.kafkatypes.CourseOperation;
+import com.courseselection.professorservice.dtos.CourseCreationDto;
 import com.courseselection.professorservice.dtos.CourseRequestDto;
 import com.courseselection.professorservice.dtos.UpdateProfessorRequestDto;
 import com.courseselection.professorservice.model.Course;
@@ -18,9 +20,11 @@ import java.util.Optional;
 @Service
 public class ProfessorService {
     @Autowired
-    ProfessorRepository professorRepository;
+    private ProfessorRepository professorRepository;
     @Autowired
-    CourseRepository courseRepository;
+    private CourseRepository courseRepository;
+    @Autowired
+    private KafkaProducer kafkaProducer;
 
     public Optional<Professor> getProfessorById(Integer id) {
         return professorRepository.findById(id);
@@ -52,6 +56,34 @@ public class ProfessorService {
                         .build()
                 )
                 .toList();
+    }
+
+    public CourseCreationDto createCourse(CourseCreationDto courseCreationDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Professor currentProfessor = (Professor) authentication.getPrincipal();
+
+        com.courseselection.kafkatypes.Course kafkaCourse = new com.courseselection.kafkatypes.Course();
+        kafkaCourse.setProfessorId(currentProfessor.getId());
+        kafkaCourse.setName(courseCreationDto.getName());
+        kafkaCourse.setCapacity(courseCreationDto.getCapacity());
+        kafkaCourse.setEnrolled(0);
+        kafkaCourse.setCode(courseCreationDto.getCode());
+
+        CourseOperation courseOperation = new CourseOperation();
+        courseOperation.setCourse(kafkaCourse);
+        courseOperation.setOperation("CREATE");
+
+        kafkaProducer.sendMessage(courseOperation);
+
+        Course course = Course
+                .builder()
+                .name(courseCreationDto.getName())
+                .code(courseCreationDto.getCode())
+                .professor(currentProfessor)
+                .build();
+        courseRepository.save(course);
+
+        return courseCreationDto;
     }
 
 }
