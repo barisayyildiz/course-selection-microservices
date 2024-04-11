@@ -29,6 +29,9 @@ public class Course {
     @Column(name="code")
     private String code;
 
+    @Column(name="capacity")
+    private Integer capacity;
+
     @ManyToOne
     @JoinColumn(name="professorid", referencedColumnName = "id")
     private Professor professor;

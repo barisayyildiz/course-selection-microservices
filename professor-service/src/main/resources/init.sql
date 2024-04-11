@@ -9,6 +9,7 @@ CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     code VARCHAR(12) NOT NULL,
+    capacity INTEGER NOT NULL,
     professorId INTEGER NOT NULL,
     FOREIGN KEY (professorId) REFERENCES professors(id)
 );

@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -6576011304388221374L;
+  private static final long serialVersionUID = 5966542801151382624L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CourseOperation\",\"namespace\":\"com.courseselection.kafkatypes\",\"fields\":[{\"name\":\"operation\",\"type\":\"string\"},{\"name\":\"course\",\"type\":{\"type\":\"record\",\"name\":\"Course\",\"fields\":[{\"name\":\"id\",\"type\":[\"int\",\"null\"]},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"code\",\"type\":\"string\"},{\"name\":\"professorId\",\"type\":\"int\"},{\"name\":\"capacity\",\"type\":\"int\"},{\"name\":\"enrolled\",\"type\":[\"int\",\"null\"]}]}}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CourseOperation\",\"namespace\":\"com.courseselection.kafkatypes\",\"fields\":[{\"name\":\"operation\",\"type\":\"string\"},{\"name\":\"course\",\"type\":[{\"type\":\"record\",\"name\":\"Course\",\"fields\":[{\"name\":\"id\",\"type\":[\"int\",\"null\"]},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"code\",\"type\":\"string\"},{\"name\":\"professorId\",\"type\":\"int\"},{\"name\":\"capacity\",\"type\":\"int\"},{\"name\":\"enrolled\",\"type\":[\"int\",\"null\"]}]},\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -406,7 +406,13 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
   {
     out.writeString(this.operation);
 
-    this.course.customEncode(out);
+    if (this.course == null) {
+      out.writeIndex(1);
+      out.writeNull();
+    } else {
+      out.writeIndex(0);
+      this.course.customEncode(out);
+    }
 
   }
 
@@ -417,10 +423,15 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
     if (fieldOrder == null) {
       this.operation = in.readString(this.operation instanceof Utf8 ? (Utf8)this.operation : null);
 
-      if (this.course == null) {
-        this.course = new com.courseselection.kafkatypes.Course();
+      if (in.readIndex() != 0) {
+        in.readNull();
+        this.course = null;
+      } else {
+        if (this.course == null) {
+          this.course = new com.courseselection.kafkatypes.Course();
+        }
+        this.course.customDecode(in);
       }
-      this.course.customDecode(in);
 
     } else {
       for (int i = 0; i < 2; i++) {
@@ -430,10 +441,15 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
           break;
 
         case 1:
-          if (this.course == null) {
-            this.course = new com.courseselection.kafkatypes.Course();
+          if (in.readIndex() != 0) {
+            in.readNull();
+            this.course = null;
+          } else {
+            if (this.course == null) {
+              this.course = new com.courseselection.kafkatypes.Course();
+            }
+            this.course.customDecode(in);
           }
-          this.course.customDecode(in);
           break;
 
         default:

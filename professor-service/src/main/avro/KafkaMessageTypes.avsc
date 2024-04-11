@@ -34,7 +34,7 @@
         "name": "operation", "type": "string"
       }, {
         "name": "course",
-        "type": "com.courseselection.kafkatypes.Course"
+        "type": ["com.courseselection.kafkatypes.Course", "null"]
       }
     ]
   }
