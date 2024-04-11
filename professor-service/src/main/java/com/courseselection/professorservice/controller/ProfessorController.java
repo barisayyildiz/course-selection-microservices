@@ -1,13 +1,11 @@
 package com.courseselection.professorservice.controller;
 
-import com.courseselection.professorservice.dtos.CourseCreationDto;
-import com.courseselection.professorservice.dtos.CourseRequestDto;
-import com.courseselection.professorservice.dtos.UpdateProfessorRequestDto;
-import com.courseselection.professorservice.dtos.UserProfileResponseDTO;
+import com.courseselection.professorservice.dtos.*;
 import com.courseselection.professorservice.model.Course;
 import com.courseselection.professorservice.model.Professor;
 import com.courseselection.professorservice.service.ProfessorService;
 import com.courseselection.professorservice.utility.ServiceUtility;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,9 +54,25 @@ public class ProfessorController {
         return new ResponseEntity<>(courseCreationDto, HttpStatus.CREATED);
     }
 
+    @PutMapping("/course/{id}")
+    public ResponseEntity<CourseRequestDto> updateCourse(
+            @PathVariable Integer id,
+            @RequestBody CourseUpdateDto courseUpdateDto
+    ) {
+        CourseRequestDto course = professorService.updateCourse(id, courseUpdateDto);
+        return new ResponseEntity<>(course, HttpStatus.OK);
+    }
+
     @DeleteMapping("/course/{id}")
-    public void dropCourse(@PathVariable String id) {
-//        TODO: drop a course
+    public ResponseEntity<String> deleteCourse(
+            @PathVariable Integer id
+    ) {
+        if(professorService.deleteCourse(id)) {
+            return new ResponseEntity<>("Course deleted", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Course does not exists", HttpStatus.NOT_FOUND);
+        }
+
     }
 
 }

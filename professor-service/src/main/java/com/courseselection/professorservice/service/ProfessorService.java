@@ -3,6 +3,7 @@ package com.courseselection.professorservice.service;
 import com.courseselection.kafkatypes.CourseOperation;
 import com.courseselection.professorservice.dtos.CourseCreationDto;
 import com.courseselection.professorservice.dtos.CourseRequestDto;
+import com.courseselection.professorservice.dtos.CourseUpdateDto;
 import com.courseselection.professorservice.dtos.UpdateProfessorRequestDto;
 import com.courseselection.professorservice.model.Course;
 import com.courseselection.professorservice.model.Professor;
@@ -53,6 +54,7 @@ public class ProfessorService {
                         .id(course.getId())
                         .name(course.getName())
                         .code(course.getCode())
+                        .capacity(course.getCapacity())
                         .build()
                 )
                 .toList();
@@ -84,6 +86,68 @@ public class ProfessorService {
         courseRepository.save(course);
 
         return courseCreationDto;
+    }
+
+    public CourseRequestDto updateCourse(Integer id, CourseUpdateDto courseUpdateDtos) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Professor currentProfessor = (Professor) authentication.getPrincipal();
+        CourseRequestDto courseRequestDto = null;
+        Course savedCourse = null;
+
+        Optional<Course> optionalCourse = courseRepository.findById(id);
+        if(optionalCourse.isPresent()) {
+            Course course = optionalCourse.get();
+            if(Objects.nonNull(courseUpdateDtos.getName())) {
+                course.setName(courseUpdateDtos.getName().get());
+            }
+            if(Objects.nonNull(courseUpdateDtos.getCode())) {
+                course.setCode(courseUpdateDtos.getCode().get());
+            }
+            if(Objects.nonNull(courseUpdateDtos.getCapacity())) {
+                course.setCapacity(courseUpdateDtos.getCapacity().get());
+            }
+            savedCourse = courseRepository.save(course);
+            courseRequestDto = CourseRequestDto
+                    .builder()
+                    .id(savedCourse.getId())
+                    .name(savedCourse.getName())
+                    .code(savedCourse.getCode())
+                    .capacity(savedCourse.getCapacity())
+                    .build();
+        }
+
+        if(Objects.nonNull(savedCourse)) {
+            com.courseselection.kafkatypes.Course kafkaCourse = new com.courseselection.kafkatypes.Course();
+            kafkaCourse.setProfessorId(currentProfessor.getId());
+            kafkaCourse.setName(savedCourse.getName());
+            kafkaCourse.setCapacity(savedCourse.getCapacity());
+            kafkaCourse.setCode(savedCourse.getCode());
+
+            CourseOperation courseOperation = new CourseOperation();
+            courseOperation.setCourse(kafkaCourse);
+            courseOperation.setOperation("UPDATE");
+
+            kafkaProducer.sendMessage(courseOperation);
+        }
+
+        return courseRequestDto;
+    }
+
+    public boolean deleteCourse(Integer id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Professor currentProfessor = (Professor) authentication.getPrincipal();
+
+        Optional<Course> optionalCourse = courseRepository.findById(id);
+        if(optionalCourse.isPresent()) {
+            CourseOperation courseOperation = new CourseOperation();
+            courseOperation.setOperation("DELETE");
+
+            kafkaProducer.sendMessage(courseOperation);
+
+            courseRepository.deleteById(optionalCourse.get().getId());
+            return true;
+        }
+        return false;
     }
 
 }

@@ -13,4 +13,5 @@ public class CourseRequestDto {
     private Integer id;
     private String name;
     private String code;
+    private Integer capacity;
 }
