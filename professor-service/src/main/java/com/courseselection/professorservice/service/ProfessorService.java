@@ -41,6 +41,7 @@ public class ProfessorService {
             currentProfessor.setName(updateProfessorRequestDto.getName().orElse(""));
 
             com.courseselection.kafkatypes.Professor professor = new com.courseselection.kafkatypes.Professor();
+            professor.setId(currentProfessor.getId());
             professor.setName(currentProfessor.getName());
             ProfessorEvent professorEvent = new ProfessorEvent("UPDATE", professor);
             kafkaProducer.sendMessage(Constants.PROFESSOR_OPERATION, professorEvent);

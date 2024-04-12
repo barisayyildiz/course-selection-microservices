@@ -1,5 +1,6 @@
 CREATE TABLE professors (
     id SERIAL PRIMARY KEY,
+    professorId INTEGER, -- used inside professor microservice
     name VARCHAR(255) NOT NULL
 );
 

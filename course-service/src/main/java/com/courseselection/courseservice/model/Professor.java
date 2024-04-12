@@ -23,6 +23,9 @@ public class Professor {
     @Column
     private Integer id;
 
+    @Column(name = "professorid")
+    private Integer professorId;
+
     @Column(name = "name")
     private String name;
 
