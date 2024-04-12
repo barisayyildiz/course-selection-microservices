@@ -1,6 +1,7 @@
 package com.courseselection.professorservice.service;
 
 import com.courseselection.kafkatypes.CourseOperation;
+import com.courseselection.kafkatypes.ProfessorEvent;
 import com.courseselection.professorservice.dtos.CourseCreationDto;
 import com.courseselection.professorservice.dtos.CourseRequestDto;
 import com.courseselection.professorservice.dtos.CourseUpdateDto;
@@ -9,6 +10,7 @@ import com.courseselection.professorservice.model.Course;
 import com.courseselection.professorservice.model.Professor;
 import com.courseselection.professorservice.repository.CourseRepository;
 import com.courseselection.professorservice.repository.ProfessorRepository;
+import com.courseselection.professorservice.utility.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,6 +39,11 @@ public class ProfessorService {
 
         if(Objects.nonNull(updateProfessorRequestDto.getName())) {
             currentProfessor.setName(updateProfessorRequestDto.getName().orElse(""));
+
+            com.courseselection.kafkatypes.Professor professor = new com.courseselection.kafkatypes.Professor();
+            professor.setName(currentProfessor.getName());
+            ProfessorEvent professorEvent = new ProfessorEvent("UPDATE", professor);
+            kafkaProducer.sendMessage(Constants.PROFESSOR_OPERATION, professorEvent);
         }
 
         return professorRepository.save(currentProfessor);
@@ -75,7 +82,7 @@ public class ProfessorService {
         courseOperation.setCourse(kafkaCourse);
         courseOperation.setOperation("CREATE");
 
-        kafkaProducer.sendMessage(courseOperation);
+        kafkaProducer.sendMessage(Constants.COURSE_OPERATION, courseOperation);
 
         Course course = Course
                 .builder()
@@ -127,7 +134,7 @@ public class ProfessorService {
             courseOperation.setCourse(kafkaCourse);
             courseOperation.setOperation("UPDATE");
 
-            kafkaProducer.sendMessage(courseOperation);
+            kafkaProducer.sendMessage(Constants.COURSE_OPERATION, courseOperation);
         }
 
         return courseRequestDto;
@@ -142,7 +149,7 @@ public class ProfessorService {
             CourseOperation courseOperation = new CourseOperation();
             courseOperation.setOperation("DELETE");
 
-            kafkaProducer.sendMessage(courseOperation);
+            kafkaProducer.sendMessage(Constants.COURSE_OPERATION, courseOperation);
 
             courseRepository.deleteById(optionalCourse.get().getId());
             return true;
