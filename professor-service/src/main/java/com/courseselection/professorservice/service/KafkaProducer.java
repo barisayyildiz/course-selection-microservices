@@ -12,10 +12,10 @@ import java.util.concurrent.CompletableFuture;
 public class KafkaProducer {
     private static final String TOPIC = "course-operation";
     @Autowired
-    private KafkaTemplate<String, CourseOperation> kafkaTemplate;
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
-    public void sendMessage(CourseOperation courseOperation) {
-        CompletableFuture<SendResult<String, CourseOperation>> future = kafkaTemplate.send(TOPIC, courseOperation);
+    public void sendMessage(String topic, Object courseOperation) {
+        CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topic, courseOperation);
 
         future.whenComplete((result, ex) -> {
             if (ex == null) {
