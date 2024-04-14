@@ -9,7 +9,5 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProfessorRepository extends JpaRepository<Professor, String> {
-    @Query("SELECT p FROM Professor p WHERE p.professorId = :id")
-    Optional<Professor> findProfessorByProfessorId(Integer id);
+public interface ProfessorRepository extends JpaRepository<Professor, Integer> {
 }

@@ -21,7 +21,6 @@ import java.util.List;
 public class ProfessorController {
     @Autowired
     private ProfessorService professorService;
-
     @Autowired
     private ServiceUtility serviceUtility;
 
@@ -72,8 +71,6 @@ public class ProfessorController {
         } else {
             return new ResponseEntity<>("Course does not exists", HttpStatus.NOT_FOUND);
         }
-
     }
-
 }
 

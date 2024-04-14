@@ -13,26 +13,26 @@ import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
-public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 5966542801151382624L;
+public class CourseEvent extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+  private static final long serialVersionUID = -215219039347966161L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CourseOperation\",\"namespace\":\"com.courseselection.kafkatypes\",\"fields\":[{\"name\":\"operation\",\"type\":\"string\"},{\"name\":\"course\",\"type\":[{\"type\":\"record\",\"name\":\"Course\",\"fields\":[{\"name\":\"id\",\"type\":[\"int\",\"null\"]},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"code\",\"type\":\"string\"},{\"name\":\"professorId\",\"type\":\"int\"},{\"name\":\"capacity\",\"type\":\"int\"},{\"name\":\"enrolled\",\"type\":[\"int\",\"null\"]}]},\"null\"]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"CourseEvent\",\"namespace\":\"com.courseselection.kafkatypes\",\"fields\":[{\"name\":\"operation\",\"type\":\"string\"},{\"name\":\"course\",\"type\":{\"type\":\"record\",\"name\":\"Course\",\"fields\":[{\"name\":\"id\",\"type\":[\"int\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"code\",\"type\":[\"string\",\"null\"]},{\"name\":\"professorId\",\"type\":[\"int\",\"null\"]},{\"name\":\"capacity\",\"type\":[\"int\",\"null\"]}]}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
 
-  private static final BinaryMessageEncoder<CourseOperation> ENCODER =
+  private static final BinaryMessageEncoder<CourseEvent> ENCODER =
       new BinaryMessageEncoder<>(MODEL$, SCHEMA$);
 
-  private static final BinaryMessageDecoder<CourseOperation> DECODER =
+  private static final BinaryMessageDecoder<CourseEvent> DECODER =
       new BinaryMessageDecoder<>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageEncoder instance used by this class.
    * @return the message encoder used by this class
    */
-  public static BinaryMessageEncoder<CourseOperation> getEncoder() {
+  public static BinaryMessageEncoder<CourseEvent> getEncoder() {
     return ENCODER;
   }
 
@@ -40,7 +40,7 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
    * Return the BinaryMessageDecoder instance used by this class.
    * @return the message decoder used by this class
    */
-  public static BinaryMessageDecoder<CourseOperation> getDecoder() {
+  public static BinaryMessageDecoder<CourseEvent> getDecoder() {
     return DECODER;
   }
 
@@ -49,12 +49,12 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    * @return a BinaryMessageDecoder instance for this class backed by the given SchemaStore
    */
-  public static BinaryMessageDecoder<CourseOperation> createDecoder(SchemaStore resolver) {
+  public static BinaryMessageDecoder<CourseEvent> createDecoder(SchemaStore resolver) {
     return new BinaryMessageDecoder<>(MODEL$, SCHEMA$, resolver);
   }
 
   /**
-   * Serializes this CourseOperation to a ByteBuffer.
+   * Serializes this CourseEvent to a ByteBuffer.
    * @return a buffer holding the serialized data for this instance
    * @throws java.io.IOException if this instance could not be serialized
    */
@@ -63,12 +63,12 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
   }
 
   /**
-   * Deserializes a CourseOperation from a ByteBuffer.
+   * Deserializes a CourseEvent from a ByteBuffer.
    * @param b a byte buffer holding serialized data for an instance of this class
-   * @return a CourseOperation instance decoded from the given buffer
+   * @return a CourseEvent instance decoded from the given buffer
    * @throws java.io.IOException if the given bytes could not be deserialized into an instance of this class
    */
-  public static CourseOperation fromByteBuffer(
+  public static CourseEvent fromByteBuffer(
       java.nio.ByteBuffer b) throws java.io.IOException {
     return DECODER.decode(b);
   }
@@ -81,14 +81,14 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
    * to their default values from the schema.  If that is desired then
    * one should use <code>newBuilder()</code>.
    */
-  public CourseOperation() {}
+  public CourseEvent() {}
 
   /**
    * All-args constructor.
    * @param operation The new value for operation
    * @param course The new value for course
    */
-  public CourseOperation(java.lang.CharSequence operation, com.courseselection.kafkatypes.Course course) {
+  public CourseEvent(java.lang.CharSequence operation, com.courseselection.kafkatypes.Course course) {
     this.operation = operation;
     this.course = course;
   }
@@ -155,45 +155,45 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
   }
 
   /**
-   * Creates a new CourseOperation RecordBuilder.
-   * @return A new CourseOperation RecordBuilder
+   * Creates a new CourseEvent RecordBuilder.
+   * @return A new CourseEvent RecordBuilder
    */
-  public static com.courseselection.kafkatypes.CourseOperation.Builder newBuilder() {
-    return new com.courseselection.kafkatypes.CourseOperation.Builder();
+  public static com.courseselection.kafkatypes.CourseEvent.Builder newBuilder() {
+    return new com.courseselection.kafkatypes.CourseEvent.Builder();
   }
 
   /**
-   * Creates a new CourseOperation RecordBuilder by copying an existing Builder.
+   * Creates a new CourseEvent RecordBuilder by copying an existing Builder.
    * @param other The existing builder to copy.
-   * @return A new CourseOperation RecordBuilder
+   * @return A new CourseEvent RecordBuilder
    */
-  public static com.courseselection.kafkatypes.CourseOperation.Builder newBuilder(com.courseselection.kafkatypes.CourseOperation.Builder other) {
+  public static com.courseselection.kafkatypes.CourseEvent.Builder newBuilder(com.courseselection.kafkatypes.CourseEvent.Builder other) {
     if (other == null) {
-      return new com.courseselection.kafkatypes.CourseOperation.Builder();
+      return new com.courseselection.kafkatypes.CourseEvent.Builder();
     } else {
-      return new com.courseselection.kafkatypes.CourseOperation.Builder(other);
+      return new com.courseselection.kafkatypes.CourseEvent.Builder(other);
     }
   }
 
   /**
-   * Creates a new CourseOperation RecordBuilder by copying an existing CourseOperation instance.
+   * Creates a new CourseEvent RecordBuilder by copying an existing CourseEvent instance.
    * @param other The existing instance to copy.
-   * @return A new CourseOperation RecordBuilder
+   * @return A new CourseEvent RecordBuilder
    */
-  public static com.courseselection.kafkatypes.CourseOperation.Builder newBuilder(com.courseselection.kafkatypes.CourseOperation other) {
+  public static com.courseselection.kafkatypes.CourseEvent.Builder newBuilder(com.courseselection.kafkatypes.CourseEvent other) {
     if (other == null) {
-      return new com.courseselection.kafkatypes.CourseOperation.Builder();
+      return new com.courseselection.kafkatypes.CourseEvent.Builder();
     } else {
-      return new com.courseselection.kafkatypes.CourseOperation.Builder(other);
+      return new com.courseselection.kafkatypes.CourseEvent.Builder(other);
     }
   }
 
   /**
-   * RecordBuilder for CourseOperation instances.
+   * RecordBuilder for CourseEvent instances.
    */
   @org.apache.avro.specific.AvroGenerated
-  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<CourseOperation>
-    implements org.apache.avro.data.RecordBuilder<CourseOperation> {
+  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<CourseEvent>
+    implements org.apache.avro.data.RecordBuilder<CourseEvent> {
 
     private java.lang.CharSequence operation;
     private com.courseselection.kafkatypes.Course course;
@@ -208,7 +208,7 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(com.courseselection.kafkatypes.CourseOperation.Builder other) {
+    private Builder(com.courseselection.kafkatypes.CourseEvent.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.operation)) {
         this.operation = data().deepCopy(fields()[0].schema(), other.operation);
@@ -224,10 +224,10 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
     }
 
     /**
-     * Creates a Builder by copying an existing CourseOperation instance
+     * Creates a Builder by copying an existing CourseEvent instance
      * @param other The existing instance to copy.
      */
-    private Builder(com.courseselection.kafkatypes.CourseOperation other) {
+    private Builder(com.courseselection.kafkatypes.CourseEvent other) {
       super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.operation)) {
         this.operation = data().deepCopy(fields()[0].schema(), other.operation);
@@ -254,7 +254,7 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
       * @param value The value of 'operation'.
       * @return This builder.
       */
-    public com.courseselection.kafkatypes.CourseOperation.Builder setOperation(java.lang.CharSequence value) {
+    public com.courseselection.kafkatypes.CourseEvent.Builder setOperation(java.lang.CharSequence value) {
       validate(fields()[0], value);
       this.operation = value;
       fieldSetFlags()[0] = true;
@@ -274,7 +274,7 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
       * Clears the value of the 'operation' field.
       * @return This builder.
       */
-    public com.courseselection.kafkatypes.CourseOperation.Builder clearOperation() {
+    public com.courseselection.kafkatypes.CourseEvent.Builder clearOperation() {
       operation = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -294,7 +294,7 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
       * @param value The value of 'course'.
       * @return This builder.
       */
-    public com.courseselection.kafkatypes.CourseOperation.Builder setCourse(com.courseselection.kafkatypes.Course value) {
+    public com.courseselection.kafkatypes.CourseEvent.Builder setCourse(com.courseselection.kafkatypes.Course value) {
       validate(fields()[1], value);
       this.courseBuilder = null;
       this.course = value;
@@ -331,7 +331,7 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
      * @return This builder.
      */
 
-    public com.courseselection.kafkatypes.CourseOperation.Builder setCourseBuilder(com.courseselection.kafkatypes.Course.Builder value) {
+    public com.courseselection.kafkatypes.CourseEvent.Builder setCourseBuilder(com.courseselection.kafkatypes.Course.Builder value) {
       clearCourse();
       courseBuilder = value;
       return this;
@@ -349,7 +349,7 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
       * Clears the value of the 'course' field.
       * @return This builder.
       */
-    public com.courseselection.kafkatypes.CourseOperation.Builder clearCourse() {
+    public com.courseselection.kafkatypes.CourseEvent.Builder clearCourse() {
       course = null;
       courseBuilder = null;
       fieldSetFlags()[1] = false;
@@ -358,9 +358,9 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
 
     @Override
     @SuppressWarnings("unchecked")
-    public CourseOperation build() {
+    public CourseEvent build() {
       try {
-        CourseOperation record = new CourseOperation();
+        CourseEvent record = new CourseEvent();
         record.operation = fieldSetFlags()[0] ? this.operation : (java.lang.CharSequence) defaultValue(fields()[0]);
         if (courseBuilder != null) {
           try {
@@ -382,8 +382,8 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<CourseOperation>
-    WRITER$ = (org.apache.avro.io.DatumWriter<CourseOperation>)MODEL$.createDatumWriter(SCHEMA$);
+  private static final org.apache.avro.io.DatumWriter<CourseEvent>
+    WRITER$ = (org.apache.avro.io.DatumWriter<CourseEvent>)MODEL$.createDatumWriter(SCHEMA$);
 
   @Override public void writeExternal(java.io.ObjectOutput out)
     throws java.io.IOException {
@@ -391,8 +391,8 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<CourseOperation>
-    READER$ = (org.apache.avro.io.DatumReader<CourseOperation>)MODEL$.createDatumReader(SCHEMA$);
+  private static final org.apache.avro.io.DatumReader<CourseEvent>
+    READER$ = (org.apache.avro.io.DatumReader<CourseEvent>)MODEL$.createDatumReader(SCHEMA$);
 
   @Override public void readExternal(java.io.ObjectInput in)
     throws java.io.IOException {
@@ -406,13 +406,7 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
   {
     out.writeString(this.operation);
 
-    if (this.course == null) {
-      out.writeIndex(1);
-      out.writeNull();
-    } else {
-      out.writeIndex(0);
-      this.course.customEncode(out);
-    }
+    this.course.customEncode(out);
 
   }
 
@@ -423,15 +417,10 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
     if (fieldOrder == null) {
       this.operation = in.readString(this.operation instanceof Utf8 ? (Utf8)this.operation : null);
 
-      if (in.readIndex() != 0) {
-        in.readNull();
-        this.course = null;
-      } else {
-        if (this.course == null) {
-          this.course = new com.courseselection.kafkatypes.Course();
-        }
-        this.course.customDecode(in);
+      if (this.course == null) {
+        this.course = new com.courseselection.kafkatypes.Course();
       }
+      this.course.customDecode(in);
 
     } else {
       for (int i = 0; i < 2; i++) {
@@ -441,15 +430,10 @@ public class CourseOperation extends org.apache.avro.specific.SpecificRecordBase
           break;
 
         case 1:
-          if (in.readIndex() != 0) {
-            in.readNull();
-            this.course = null;
-          } else {
-            if (this.course == null) {
-              this.course = new com.courseselection.kafkatypes.Course();
-            }
-            this.course.customDecode(in);
+          if (this.course == null) {
+            this.course = new com.courseselection.kafkatypes.Course();
           }
+          this.course.customDecode(in);
           break;
 
         default:

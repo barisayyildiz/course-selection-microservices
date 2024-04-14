@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Course {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Integer id;
 

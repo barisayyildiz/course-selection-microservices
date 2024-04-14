@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Integer> {
     @Query("SELECT DISTINCT c FROM Course c WHERE c.name ILIKE %:name%")
     List<Course> searchByName(String name);
 }
+

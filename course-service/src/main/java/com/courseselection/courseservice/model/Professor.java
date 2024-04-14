@@ -19,12 +19,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Professor {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Integer id;
-
-    @Column(name = "professorid")
-    private Integer professorId;
 
     @Column(name = "name")
     private String name;

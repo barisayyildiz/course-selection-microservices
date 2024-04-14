@@ -17,7 +17,7 @@ public class ProfessorService {
     public void addProfessor(GenericData.Record record) {
         Professor professor = Professor
                 .builder()
-                .professorId(Integer.parseInt(record.get("id").toString()))
+                .id(Integer.parseInt(record.get("id").toString()))
                 .name(record.get("name").toString())
                 .build();
         professorRepository.save(professor);
@@ -25,7 +25,7 @@ public class ProfessorService {
 
     public void updateProfessor(GenericData.Record record) {
         Integer id = Integer.parseInt(record.get("id").toString());
-        Optional<Professor> optionalProfessor = professorRepository.findProfessorByProfessorId(id);
+        Optional<Professor> optionalProfessor = professorRepository.findById(id);
         if(optionalProfessor.isPresent()) {
             Professor persistentProfessor = optionalProfessor.get();
             if(Objects.nonNull(record.get("name"))) {

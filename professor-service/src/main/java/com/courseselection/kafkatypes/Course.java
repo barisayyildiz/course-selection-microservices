@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class Course extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 7252341331749231105L;
+  private static final long serialVersionUID = 3217769756598285060L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Course\",\"namespace\":\"com.courseselection.kafkatypes\",\"fields\":[{\"name\":\"id\",\"type\":[\"int\",\"null\"]},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"code\",\"type\":\"string\"},{\"name\":\"professorId\",\"type\":\"int\"},{\"name\":\"capacity\",\"type\":\"int\"},{\"name\":\"enrolled\",\"type\":[\"int\",\"null\"]}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Course\",\"namespace\":\"com.courseselection.kafkatypes\",\"fields\":[{\"name\":\"id\",\"type\":[\"int\",\"null\"]},{\"name\":\"name\",\"type\":[\"string\",\"null\"]},{\"name\":\"code\",\"type\":[\"string\",\"null\"]},{\"name\":\"professorId\",\"type\":[\"int\",\"null\"]},{\"name\":\"capacity\",\"type\":[\"int\",\"null\"]}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -76,9 +76,8 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
   private java.lang.Integer id;
   private java.lang.CharSequence name;
   private java.lang.CharSequence code;
-  private int professorId;
-  private int capacity;
-  private java.lang.Integer enrolled;
+  private java.lang.Integer professorId;
+  private java.lang.Integer capacity;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -94,15 +93,13 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
    * @param code The new value for code
    * @param professorId The new value for professorId
    * @param capacity The new value for capacity
-   * @param enrolled The new value for enrolled
    */
-  public Course(java.lang.Integer id, java.lang.CharSequence name, java.lang.CharSequence code, java.lang.Integer professorId, java.lang.Integer capacity, java.lang.Integer enrolled) {
+  public Course(java.lang.Integer id, java.lang.CharSequence name, java.lang.CharSequence code, java.lang.Integer professorId, java.lang.Integer capacity) {
     this.id = id;
     this.name = name;
     this.code = code;
     this.professorId = professorId;
     this.capacity = capacity;
-    this.enrolled = enrolled;
   }
 
   @Override
@@ -120,7 +117,6 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
     case 2: return code;
     case 3: return professorId;
     case 4: return capacity;
-    case 5: return enrolled;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -135,7 +131,6 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
     case 2: code = (java.lang.CharSequence)value$; break;
     case 3: professorId = (java.lang.Integer)value$; break;
     case 4: capacity = (java.lang.Integer)value$; break;
-    case 5: enrolled = (java.lang.Integer)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -195,7 +190,7 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
    * Gets the value of the 'professorId' field.
    * @return The value of the 'professorId' field.
    */
-  public int getProfessorId() {
+  public java.lang.Integer getProfessorId() {
     return professorId;
   }
 
@@ -204,7 +199,7 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
    * Sets the value of the 'professorId' field.
    * @param value the value to set.
    */
-  public void setProfessorId(int value) {
+  public void setProfessorId(java.lang.Integer value) {
     this.professorId = value;
   }
 
@@ -212,7 +207,7 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
    * Gets the value of the 'capacity' field.
    * @return The value of the 'capacity' field.
    */
-  public int getCapacity() {
+  public java.lang.Integer getCapacity() {
     return capacity;
   }
 
@@ -221,25 +216,8 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
    * Sets the value of the 'capacity' field.
    * @param value the value to set.
    */
-  public void setCapacity(int value) {
+  public void setCapacity(java.lang.Integer value) {
     this.capacity = value;
-  }
-
-  /**
-   * Gets the value of the 'enrolled' field.
-   * @return The value of the 'enrolled' field.
-   */
-  public java.lang.Integer getEnrolled() {
-    return enrolled;
-  }
-
-
-  /**
-   * Sets the value of the 'enrolled' field.
-   * @param value the value to set.
-   */
-  public void setEnrolled(java.lang.Integer value) {
-    this.enrolled = value;
   }
 
   /**
@@ -286,9 +264,8 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
     private java.lang.Integer id;
     private java.lang.CharSequence name;
     private java.lang.CharSequence code;
-    private int professorId;
-    private int capacity;
-    private java.lang.Integer enrolled;
+    private java.lang.Integer professorId;
+    private java.lang.Integer capacity;
 
     /** Creates a new Builder */
     private Builder() {
@@ -321,10 +298,6 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
         this.capacity = data().deepCopy(fields()[4].schema(), other.capacity);
         fieldSetFlags()[4] = other.fieldSetFlags()[4];
       }
-      if (isValidValue(fields()[5], other.enrolled)) {
-        this.enrolled = data().deepCopy(fields()[5].schema(), other.enrolled);
-        fieldSetFlags()[5] = other.fieldSetFlags()[5];
-      }
     }
 
     /**
@@ -352,10 +325,6 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
       if (isValidValue(fields()[4], other.capacity)) {
         this.capacity = data().deepCopy(fields()[4].schema(), other.capacity);
         fieldSetFlags()[4] = true;
-      }
-      if (isValidValue(fields()[5], other.enrolled)) {
-        this.enrolled = data().deepCopy(fields()[5].schema(), other.enrolled);
-        fieldSetFlags()[5] = true;
       }
     }
 
@@ -483,7 +452,7 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
       * Gets the value of the 'professorId' field.
       * @return The value.
       */
-    public int getProfessorId() {
+    public java.lang.Integer getProfessorId() {
       return professorId;
     }
 
@@ -493,7 +462,7 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
       * @param value The value of 'professorId'.
       * @return This builder.
       */
-    public com.courseselection.kafkatypes.Course.Builder setProfessorId(int value) {
+    public com.courseselection.kafkatypes.Course.Builder setProfessorId(java.lang.Integer value) {
       validate(fields()[3], value);
       this.professorId = value;
       fieldSetFlags()[3] = true;
@@ -514,6 +483,7 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
       * @return This builder.
       */
     public com.courseselection.kafkatypes.Course.Builder clearProfessorId() {
+      professorId = null;
       fieldSetFlags()[3] = false;
       return this;
     }
@@ -522,7 +492,7 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
       * Gets the value of the 'capacity' field.
       * @return The value.
       */
-    public int getCapacity() {
+    public java.lang.Integer getCapacity() {
       return capacity;
     }
 
@@ -532,7 +502,7 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
       * @param value The value of 'capacity'.
       * @return This builder.
       */
-    public com.courseselection.kafkatypes.Course.Builder setCapacity(int value) {
+    public com.courseselection.kafkatypes.Course.Builder setCapacity(java.lang.Integer value) {
       validate(fields()[4], value);
       this.capacity = value;
       fieldSetFlags()[4] = true;
@@ -553,47 +523,8 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
       * @return This builder.
       */
     public com.courseselection.kafkatypes.Course.Builder clearCapacity() {
+      capacity = null;
       fieldSetFlags()[4] = false;
-      return this;
-    }
-
-    /**
-      * Gets the value of the 'enrolled' field.
-      * @return The value.
-      */
-    public java.lang.Integer getEnrolled() {
-      return enrolled;
-    }
-
-
-    /**
-      * Sets the value of the 'enrolled' field.
-      * @param value The value of 'enrolled'.
-      * @return This builder.
-      */
-    public com.courseselection.kafkatypes.Course.Builder setEnrolled(java.lang.Integer value) {
-      validate(fields()[5], value);
-      this.enrolled = value;
-      fieldSetFlags()[5] = true;
-      return this;
-    }
-
-    /**
-      * Checks whether the 'enrolled' field has been set.
-      * @return True if the 'enrolled' field has been set, false otherwise.
-      */
-    public boolean hasEnrolled() {
-      return fieldSetFlags()[5];
-    }
-
-
-    /**
-      * Clears the value of the 'enrolled' field.
-      * @return This builder.
-      */
-    public com.courseselection.kafkatypes.Course.Builder clearEnrolled() {
-      enrolled = null;
-      fieldSetFlags()[5] = false;
       return this;
     }
 
@@ -607,7 +538,6 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
         record.code = fieldSetFlags()[2] ? this.code : (java.lang.CharSequence) defaultValue(fields()[2]);
         record.professorId = fieldSetFlags()[3] ? this.professorId : (java.lang.Integer) defaultValue(fields()[3]);
         record.capacity = fieldSetFlags()[4] ? this.capacity : (java.lang.Integer) defaultValue(fields()[4]);
-        record.enrolled = fieldSetFlags()[5] ? this.enrolled : (java.lang.Integer) defaultValue(fields()[5]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -648,20 +578,36 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
       out.writeInt(this.id);
     }
 
-    out.writeString(this.name);
-
-    out.writeString(this.code);
-
-    out.writeInt(this.professorId);
-
-    out.writeInt(this.capacity);
-
-    if (this.enrolled == null) {
+    if (this.name == null) {
       out.writeIndex(1);
       out.writeNull();
     } else {
       out.writeIndex(0);
-      out.writeInt(this.enrolled);
+      out.writeString(this.name);
+    }
+
+    if (this.code == null) {
+      out.writeIndex(1);
+      out.writeNull();
+    } else {
+      out.writeIndex(0);
+      out.writeString(this.code);
+    }
+
+    if (this.professorId == null) {
+      out.writeIndex(1);
+      out.writeNull();
+    } else {
+      out.writeIndex(0);
+      out.writeInt(this.professorId);
+    }
+
+    if (this.capacity == null) {
+      out.writeIndex(1);
+      out.writeNull();
+    } else {
+      out.writeIndex(0);
+      out.writeInt(this.capacity);
     }
 
   }
@@ -678,23 +624,36 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
         this.id = in.readInt();
       }
 
-      this.name = in.readString(this.name instanceof Utf8 ? (Utf8)this.name : null);
-
-      this.code = in.readString(this.code instanceof Utf8 ? (Utf8)this.code : null);
-
-      this.professorId = in.readInt();
-
-      this.capacity = in.readInt();
+      if (in.readIndex() != 0) {
+        in.readNull();
+        this.name = null;
+      } else {
+        this.name = in.readString(this.name instanceof Utf8 ? (Utf8)this.name : null);
+      }
 
       if (in.readIndex() != 0) {
         in.readNull();
-        this.enrolled = null;
+        this.code = null;
       } else {
-        this.enrolled = in.readInt();
+        this.code = in.readString(this.code instanceof Utf8 ? (Utf8)this.code : null);
+      }
+
+      if (in.readIndex() != 0) {
+        in.readNull();
+        this.professorId = null;
+      } else {
+        this.professorId = in.readInt();
+      }
+
+      if (in.readIndex() != 0) {
+        in.readNull();
+        this.capacity = null;
+      } else {
+        this.capacity = in.readInt();
       }
 
     } else {
-      for (int i = 0; i < 6; i++) {
+      for (int i = 0; i < 5; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
           if (in.readIndex() != 0) {
@@ -706,27 +665,38 @@ public class Course extends org.apache.avro.specific.SpecificRecordBase implemen
           break;
 
         case 1:
-          this.name = in.readString(this.name instanceof Utf8 ? (Utf8)this.name : null);
+          if (in.readIndex() != 0) {
+            in.readNull();
+            this.name = null;
+          } else {
+            this.name = in.readString(this.name instanceof Utf8 ? (Utf8)this.name : null);
+          }
           break;
 
         case 2:
-          this.code = in.readString(this.code instanceof Utf8 ? (Utf8)this.code : null);
+          if (in.readIndex() != 0) {
+            in.readNull();
+            this.code = null;
+          } else {
+            this.code = in.readString(this.code instanceof Utf8 ? (Utf8)this.code : null);
+          }
           break;
 
         case 3:
-          this.professorId = in.readInt();
+          if (in.readIndex() != 0) {
+            in.readNull();
+            this.professorId = null;
+          } else {
+            this.professorId = in.readInt();
+          }
           break;
 
         case 4:
-          this.capacity = in.readInt();
-          break;
-
-        case 5:
           if (in.readIndex() != 0) {
             in.readNull();
-            this.enrolled = null;
+            this.capacity = null;
           } else {
-            this.enrolled = in.readInt();
+            this.capacity = in.readInt();
           }
           break;
 

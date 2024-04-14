@@ -1,6 +1,6 @@
 package com.courseselection.professorservice.service;
 
-import com.courseselection.kafkatypes.CourseOperation;
+import com.courseselection.kafkatypes.CourseEvent;
 import com.courseselection.kafkatypes.ProfessorEvent;
 import com.courseselection.professorservice.dtos.CourseCreationDto;
 import com.courseselection.professorservice.dtos.CourseRequestDto;
@@ -72,26 +72,24 @@ public class ProfessorService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Professor currentProfessor = (Professor) authentication.getPrincipal();
 
-        com.courseselection.kafkatypes.Course kafkaCourse = new com.courseselection.kafkatypes.Course();
-        kafkaCourse.setProfessorId(currentProfessor.getId());
-        kafkaCourse.setName(courseCreationDto.getName());
-        kafkaCourse.setCapacity(courseCreationDto.getCapacity());
-        kafkaCourse.setEnrolled(0);
-        kafkaCourse.setCode(courseCreationDto.getCode());
-
-        CourseOperation courseOperation = new CourseOperation();
-        courseOperation.setCourse(kafkaCourse);
-        courseOperation.setOperation("CREATE");
-
-        kafkaProducer.sendMessage(Constants.COURSE_OPERATION, courseOperation);
-
         Course course = Course
                 .builder()
                 .name(courseCreationDto.getName())
                 .code(courseCreationDto.getCode())
+                .capacity(courseCreationDto.getCapacity())
                 .professor(currentProfessor)
                 .build();
-        courseRepository.save(course);
+        Course savedCourse = courseRepository.save(course);
+
+        com.courseselection.kafkatypes.Course kafkaCourse = new com.courseselection.kafkatypes.Course();
+        kafkaCourse.setId(savedCourse.getId());
+        kafkaCourse.setProfessorId(savedCourse.getProfessor().getId());
+        kafkaCourse.setName(courseCreationDto.getName());
+        kafkaCourse.setCapacity(courseCreationDto.getCapacity());
+        kafkaCourse.setCode(courseCreationDto.getCode());
+
+        CourseEvent courseEvent = new CourseEvent("CREATE", kafkaCourse);
+        kafkaProducer.sendMessage(Constants.COURSE_OPERATION, courseEvent);
 
         return courseCreationDto;
     }
@@ -105,15 +103,9 @@ public class ProfessorService {
         Optional<Course> optionalCourse = courseRepository.findById(id);
         if(optionalCourse.isPresent()) {
             Course course = optionalCourse.get();
-            if(Objects.nonNull(courseUpdateDtos.getName())) {
-                course.setName(courseUpdateDtos.getName().get());
-            }
-            if(Objects.nonNull(courseUpdateDtos.getCode())) {
-                course.setCode(courseUpdateDtos.getCode().get());
-            }
-            if(Objects.nonNull(courseUpdateDtos.getCapacity())) {
-                course.setCapacity(courseUpdateDtos.getCapacity().get());
-            }
+            course.setName(courseUpdateDtos.getName());
+            course.setCode(courseUpdateDtos.getCode());
+            course.setCapacity(courseUpdateDtos.getCapacity());
             savedCourse = courseRepository.save(course);
             courseRequestDto = CourseRequestDto
                     .builder()
@@ -126,36 +118,30 @@ public class ProfessorService {
 
         if(Objects.nonNull(savedCourse)) {
             com.courseselection.kafkatypes.Course kafkaCourse = new com.courseselection.kafkatypes.Course();
-            kafkaCourse.setProfessorId(currentProfessor.getId());
+            kafkaCourse.setId(savedCourse.getId());
             kafkaCourse.setName(savedCourse.getName());
-            kafkaCourse.setCapacity(savedCourse.getCapacity());
             kafkaCourse.setCode(savedCourse.getCode());
+            kafkaCourse.setCapacity(savedCourse.getCapacity());
+            kafkaCourse.setProfessorId(currentProfessor.getId());
 
-            CourseOperation courseOperation = new CourseOperation();
-            courseOperation.setCourse(kafkaCourse);
-            courseOperation.setOperation("UPDATE");
-
-            kafkaProducer.sendMessage(Constants.COURSE_OPERATION, courseOperation);
+            CourseEvent courseEvent = new CourseEvent("UPDATE", kafkaCourse);
+            kafkaProducer.sendMessage(Constants.COURSE_OPERATION, courseEvent);
         }
 
         return courseRequestDto;
     }
 
     public boolean deleteCourse(Integer id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Professor currentProfessor = (Professor) authentication.getPrincipal();
-
         Optional<Course> optionalCourse = courseRepository.findById(id);
         if(optionalCourse.isPresent()) {
-            CourseOperation courseOperation = new CourseOperation();
-            courseOperation.setOperation("DELETE");
+            com.courseselection.kafkatypes.Course kafkaCourse = new com.courseselection.kafkatypes.Course();
+            kafkaCourse.setId(optionalCourse.get().getId());
+            CourseEvent courseEvent = new CourseEvent("DELETE", kafkaCourse);
 
-            kafkaProducer.sendMessage(Constants.COURSE_OPERATION, courseOperation);
-
+            kafkaProducer.sendMessage(Constants.COURSE_OPERATION, courseEvent);
             courseRepository.deleteById(optionalCourse.get().getId());
             return true;
         }
         return false;
     }
-
 }

@@ -14,7 +14,7 @@ public class KafkaProfessorListener {
     @Autowired
     private ProfessorService professorService;
 
-    @KafkaListener(id = "courseServiceConsumer", topics = topic, groupId = "course-service", autoStartup = "true")
+    @KafkaListener(id = "courseServiceProfessorConsumer", topics = topic, groupId = "course-service", autoStartup = "true")
     public void listen(GenericData.Record record) {
         GenericData.Record kafkaProfessor = (GenericData.Record) record.get("professor");
         switch (record.get("operation").toString()) {

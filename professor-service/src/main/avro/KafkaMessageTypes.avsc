@@ -9,32 +9,29 @@
         "type": ["int", "null"]
       }, {
         "name": "name",
-        "type": "string"
+        "type": ["string", "null"]
       }, {
         "name": "code",
-        "type": "string"
+        "type": ["string", "null"]
       }, {
         "name": "professorId",
-        "type": "int"
+        "type": ["int", "null"]
       }, {
         "name": "capacity",
-        "type": "int"
-      }, {
-        "name": "enrolled",
         "type": ["int", "null"]
       }
     ]
   },
   {
     "namespace": "com.courseselection.kafkatypes",
-    "name": "CourseOperation",
+    "name": "CourseEvent",
     "type": "record",
     "fields": [
       {
         "name": "operation", "type": "string"
       }, {
         "name": "course",
-        "type": ["com.courseselection.kafkatypes.Course", "null"]
+        "type": "com.courseselection.kafkatypes.Course"
       }
     ]
   },

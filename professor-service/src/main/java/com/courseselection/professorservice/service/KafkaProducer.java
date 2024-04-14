@@ -1,6 +1,5 @@
 package com.courseselection.professorservice.service;
 
-import com.courseselection.kafkatypes.CourseOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
