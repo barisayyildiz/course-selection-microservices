@@ -6,8 +6,8 @@ CREATE TABLE students (
 );
 
 CREATE TABLE enrolled_courses (
-    courseId INTEGER NOT NULL,
-    studentId INTEGER NOT NULL,
-    PRIMARY KEY (courseId, studentId),
-    FOREIGN KEY (studentId) REFERENCES students(id)
+    course_id INTEGER NOT NULL,
+    student_id INTEGER NOT NULL,
+    PRIMARY KEY (course_id, student_id),
+    FOREIGN KEY (student_id) REFERENCES students(id)
 );

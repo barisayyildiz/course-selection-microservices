@@ -16,6 +16,7 @@ public class KafkaProfessorListener {
 
     @KafkaListener(id = "courseServiceProfessorConsumer", topics = topic, groupId = "course-service", autoStartup = "true")
     public void listen(GenericData.Record record) {
+        System.out.println("listening professors topic");
         GenericData.Record kafkaProfessor = (GenericData.Record) record.get("professor");
         switch (record.get("operation").toString()) {
             case "CREATE":

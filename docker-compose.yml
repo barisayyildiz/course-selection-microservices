@@ -25,6 +25,19 @@ services:
     volumes:
       - pgdataprofessor:/var/lib/postgresql/data
       - ./professor-service/src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
+  student-db:
+    container_name: student_db
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    volumes:
+      - pgdatastudent:/var/lib/postgresql/data
+      - ./student-service/src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
   redpanda-0:
     command:
       - redpanda
@@ -72,4 +85,5 @@ services:
 volumes:
   pgdatacourse: null
   pgdataprofessor: null
+  pgdatastudent: null
   redpanda-0: null

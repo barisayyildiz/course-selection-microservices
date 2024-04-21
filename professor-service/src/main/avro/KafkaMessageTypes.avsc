@@ -65,5 +65,43 @@
         "type": ["com.courseselection.kafkatypes.Professor",  "null"]
       }
     ]
+  },
+  {
+    "namespace": "com.courseselection.kafkatypes",
+    "name": "EnrollmentRequest",
+    "type": "record",
+    "fields": [
+      {
+        "name": "course_id",
+        "type": "int"
+      },
+      {
+        "name": "student_id",
+        "type": "int"
+      }
+    ]
+  },
+  {
+    "namespace": "com.courseselection.kafkatypes",
+    "name": "EnrollmentResponse",
+    "type": "record",
+    "fields": [
+      {
+        "name": "type",
+        "type": "string"
+      },
+      {
+        "name": "message",
+        "type": "string"
+      },
+      {
+        "name": "course_id",
+        "type": "int"
+      },
+      {
+        "name": "student_id",
+        "type": "int"
+      }
+    ]
   }
 ]

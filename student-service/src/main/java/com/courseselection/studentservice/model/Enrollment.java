@@ -18,6 +18,7 @@ public class Enrollment {
     @EmbeddedId
     private EnrollmentId id;
 
+    @MapsId("studentId")
     @ManyToOne
     @JoinColumn(name = "studentId", referencedColumnName = "id", insertable = false, updatable = false)
     private Student student;
