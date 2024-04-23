@@ -1,0 +1,6 @@
+KafkaConsumer/*
+KafkaTest/*
+.course-service/*
+.professor-service/*
+.idea/*
+kafka_docker/*
