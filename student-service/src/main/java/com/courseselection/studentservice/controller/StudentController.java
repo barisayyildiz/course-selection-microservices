@@ -1,15 +1,18 @@
 package com.courseselection.studentservice.controller;
 
 import com.courseselection.studentservice.dtos.EnrollmentResponseDto;
+import com.courseselection.studentservice.dtos.StudentResponseDto;
 import com.courseselection.studentservice.dtos.UpdateStudentDto;
-import com.courseselection.studentservice.model.Student;
 import com.courseselection.studentservice.repository.StudentRepository;
 import com.courseselection.studentservice.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Validated
 @RestController
 @RequestMapping("/api")
 public class StudentController {
@@ -19,14 +22,16 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping("/student")
-    public ResponseEntity<Student> getCurrentStudent() {
-        return new ResponseEntity<Student>(studentService.getCurrentStudent(), HttpStatus.OK);
+    public ResponseEntity<StudentResponseDto> getCurrentStudent() {
+        return new ResponseEntity<StudentResponseDto>(studentService.getCurrentStudent(), HttpStatus.OK);
     }
 
     @PutMapping("/student")
-    public ResponseEntity<Student> updateStudent(@RequestBody UpdateStudentDto updateStudentDto) {
-        Student savedStudent = studentService.updateStudent(updateStudentDto);
-        return new ResponseEntity<Student>(savedStudent, HttpStatus.OK);
+    public ResponseEntity<StudentResponseDto> updateStudent(
+            @Valid @RequestBody UpdateStudentDto updateStudentDto
+    ) {
+        StudentResponseDto savedStudent = studentService.updateStudent(updateStudentDto);
+        return new ResponseEntity<StudentResponseDto>(savedStudent, HttpStatus.OK);
     }
 
     @PostMapping("/enroll")
@@ -58,7 +63,5 @@ public class StudentController {
             );
         }
     }
-
-    public void dropCourse() {}
 
 }

@@ -1,7 +1,7 @@
 package com.courseselection.studentservice.service;
 
 import com.courseselection.kafkatypes.EnrollmentDropRequest;
-import com.courseselection.kafkatypes.EnrollmentRequest;
+import com.courseselection.studentservice.dtos.StudentResponseDto;
 import com.courseselection.studentservice.dtos.UpdateStudentDto;
 import com.courseselection.studentservice.model.Enrollment;
 import com.courseselection.studentservice.model.EnrollmentId;
@@ -26,17 +26,30 @@ public class StudentService {
     @Autowired
     KafkaProducer kafkaProducer;
 
-    public Student getCurrentStudent() {
+    public StudentResponseDto getCurrentStudent() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (Student) authentication.getPrincipal();
+        Student authStudent = (Student) authentication.getPrincipal();
+        return StudentResponseDto
+                .builder()
+                .id(authStudent.getId())
+                .name(authStudent.getName())
+                .email(authStudent.getEmail())
+                .build();
     }
 
-    public Student updateStudent(UpdateStudentDto updateStudentDto) {
+    public StudentResponseDto updateStudent(UpdateStudentDto updateStudentDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Student student = (Student) authentication.getPrincipal();
 
         student.setName(updateStudentDto.getName());
-        return studentRepository.save(student);
+
+        Student savedStudent = studentRepository.save(student);
+        return StudentResponseDto
+                .builder()
+                .id(savedStudent.getId())
+                .name(savedStudent.getName())
+                .email(savedStudent.getEmail())
+                .build();
     }
 
     public Boolean enrollCourse(Integer courseId) {
