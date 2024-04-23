@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,14 +41,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if(request.getRequestURI().startsWith("/auth/")) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        final String authHeader = request.getHeader("Authorization");
+
         try {
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                throw new AccessDeniedException("Jwt is not provided");
+            }
+
             final String jwt = authHeader.substring(7);
             final String userEmail = jwtUtil.extractUsername(jwt);
 
