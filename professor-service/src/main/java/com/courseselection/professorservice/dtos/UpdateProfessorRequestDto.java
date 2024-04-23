@@ -1,10 +1,10 @@
 package com.courseselection.professorservice.dtos;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-
-import java.util.Optional;
 
 @Getter
 public class UpdateProfessorRequestDto {
-    private Optional<String> name;
+    @NotNull(message = "Professor name required")
+    private String name;
 }

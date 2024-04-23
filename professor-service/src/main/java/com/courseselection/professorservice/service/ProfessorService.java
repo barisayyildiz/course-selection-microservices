@@ -37,15 +37,12 @@ public class ProfessorService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Professor currentProfessor = (Professor) authentication.getPrincipal();
 
-        if(Objects.nonNull(updateProfessorRequestDto.getName())) {
-            currentProfessor.setName(updateProfessorRequestDto.getName().orElse(""));
-
-            com.courseselection.kafkatypes.Professor professor = new com.courseselection.kafkatypes.Professor();
-            professor.setId(currentProfessor.getId());
-            professor.setName(currentProfessor.getName());
-            ProfessorEvent professorEvent = new ProfessorEvent("UPDATE", professor);
-            kafkaProducer.sendMessage(Constants.PROFESSOR_OPERATION, professorEvent);
-        }
+        currentProfessor.setName(updateProfessorRequestDto.getName());
+        com.courseselection.kafkatypes.Professor professor = new com.courseselection.kafkatypes.Professor();
+        professor.setId(currentProfessor.getId());
+        professor.setName(currentProfessor.getName());
+        ProfessorEvent professorEvent = new ProfessorEvent("UPDATE", professor);
+        kafkaProducer.sendMessage(Constants.PROFESSOR_OPERATION, professorEvent);
 
         return professorRepository.save(currentProfessor);
     }
@@ -94,7 +91,7 @@ public class ProfessorService {
         return courseCreationDto;
     }
 
-    public CourseRequestDto updateCourse(Integer id, CourseUpdateDto courseUpdateDtos) {
+    public CourseRequestDto updateCourse(Integer id, CourseUpdateDto courseUpdateDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Professor currentProfessor = (Professor) authentication.getPrincipal();
         CourseRequestDto courseRequestDto = null;
@@ -103,9 +100,9 @@ public class ProfessorService {
         Optional<Course> optionalCourse = courseRepository.findById(id);
         if(optionalCourse.isPresent()) {
             Course course = optionalCourse.get();
-            course.setName(courseUpdateDtos.getName());
-            course.setCode(courseUpdateDtos.getCode());
-            course.setCapacity(courseUpdateDtos.getCapacity());
+            course.setName(courseUpdateDto.getName());
+            course.setCode(courseUpdateDto.getCode());
+            course.setCapacity(courseUpdateDto.getCapacity());
             savedCourse = courseRepository.save(course);
             courseRequestDto = CourseRequestDto
                     .builder()
