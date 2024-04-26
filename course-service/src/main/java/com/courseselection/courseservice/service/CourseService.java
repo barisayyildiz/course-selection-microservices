@@ -1,5 +1,6 @@
 package com.courseselection.courseservice.service;
 
+import com.courseselection.courseservice.dto.CourseResponseDto;
 import com.courseselection.courseservice.model.Course;
 import com.courseselection.courseservice.model.Professor;
 import com.courseselection.courseservice.repository.CourseRepository;
@@ -9,6 +10,8 @@ import com.courseselection.kafkatypes.EnrollmentDropResponse;
 import com.courseselection.kafkatypes.EnrollmentResponse;
 import org.apache.avro.generic.GenericData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +28,8 @@ public class CourseService {
     @Autowired
     private KafkaProducer kafkaProducer;
 
-    public List<Course> findAllCourses() {
-        return courseRepository.findAll();
+    public Page<CourseResponseDto> findAllCourses(Integer pageNumber, Integer pageSize) {
+        return courseRepository.findAllCoursesByPage(PageRequest.of(pageNumber, pageSize));
     }
 
     public List<Course> searchCoursesByName(String query) {
