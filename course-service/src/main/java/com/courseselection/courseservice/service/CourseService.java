@@ -6,9 +6,9 @@ import com.courseselection.courseservice.model.Professor;
 import com.courseselection.courseservice.repository.CourseRepository;
 import com.courseselection.courseservice.repository.ProfessorRepository;
 import com.courseselection.courseservice.utility.Constants;
+import com.courseselection.kafkatypes.CourseEvent;
+import com.courseselection.kafkatypes.EnrollmentDropRequest;
 import com.courseselection.kafkatypes.EnrollmentDropResponse;
-import com.courseselection.kafkatypes.EnrollmentResponse;
-import org.apache.avro.generic.GenericData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,16 +36,16 @@ public class CourseService {
         return courseRepository.searchByName(query);
     }
 
-    public void addCourse(GenericData.Record record) {
-        Integer professorId = Integer.parseInt(record.get("professorId").toString());
+    public void addCourse(com.courseselection.kafkatypes.Course kafkaCourse) {
+        Integer professorId = kafkaCourse.getProfessorId();
         Optional<Professor> durableProfessor = professorRepository.findById(professorId);
         if(durableProfessor.isPresent()) {
             Course course = Course
                     .builder()
-                    .id(Integer.parseInt(record.get("id").toString()))
-                    .name(record.get("name").toString())
-                    .code(record.get("code").toString())
-                    .capacity(Integer.parseInt(record.get("capacity").toString()))
+                    .id(kafkaCourse.getId())
+                    .name(kafkaCourse.getName().toString())
+                    .code(kafkaCourse.getCode().toString())
+                    .capacity(kafkaCourse.getCapacity())
                     .enrolled(0)
                     .professor(durableProfessor.get())
                     .build();
@@ -53,20 +53,20 @@ public class CourseService {
         }
     }
 
-    public void updateCourse(GenericData.Record record) {
-        Integer professorId = Integer.parseInt(record.get("professorId").toString());
+    public void updateCourse(com.courseselection.kafkatypes.Course kafkaCourse) {
+        Integer professorId = kafkaCourse.getProfessorId();
         Optional<Professor> durableProfessor = professorRepository.findById(professorId);
         Optional<Course> optionalCourse = courseRepository.findById(
-                Integer.parseInt(record.get("id").toString())
+                kafkaCourse.getId()
         );
 
         if(durableProfessor.isPresent() && optionalCourse.isPresent()) {
             Course course = Course
                     .builder()
                     .id(optionalCourse.get().getId())
-                    .name(record.get("name").toString())
-                    .code(record.get("code").toString())
-                    .capacity(Integer.parseInt(record.get("capacity").toString()))
+                    .name(kafkaCourse.getName().toString())
+                    .code(kafkaCourse.getCode().toString())
+                    .capacity(kafkaCourse.getCapacity())
                     .enrolled(optionalCourse.get().getEnrolled())
                     .professor(durableProfessor.get())
                     .build();
@@ -74,20 +74,20 @@ public class CourseService {
         }
     }
 
-    public void deleteCourse(GenericData.Record record) {
+    public void deleteCourse(com.courseselection.kafkatypes.Course kafkaCourse) {
         Optional<Course> optionalCourse = courseRepository.findById(
-                Integer.parseInt(record.get("id").toString())
+                kafkaCourse.getId()
         );
         optionalCourse.ifPresent(course -> courseRepository.delete(course));
     }
 
     @Transactional
-    public void processEnrollmentRequest(GenericData.Record record) {
+    public void processEnrollmentRequest(EnrollmentDropRequest enrollmentDropRequest) {
         System.out.println("inside processEnrollmentRequest");
 
-        Integer courseId = (Integer) record.get("course_id");
-        Integer studentId = (Integer) record.get("student_id");
-        String type = record.get("type").toString();
+        int courseId = enrollmentDropRequest.getCourseId();
+        int studentId = enrollmentDropRequest.getStudentId();
+        String type = enrollmentDropRequest.getType().toString();
 
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
 

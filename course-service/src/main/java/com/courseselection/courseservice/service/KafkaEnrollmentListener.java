@@ -1,6 +1,6 @@
 package com.courseselection.courseservice.service;
 
-import org.apache.avro.generic.GenericData;
+import com.courseselection.kafkatypes.EnrollmentDropRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -13,8 +13,8 @@ public class KafkaEnrollmentListener {
     private CourseService courseService;
 
     @KafkaListener(id = "courseServiceEnrollmentConsumer", topics = topic, groupId = "course-service", autoStartup = "true")
-    public void listen(GenericData.Record record) {
+    public void listen(EnrollmentDropRequest enrollmentDropRequest) {
         System.out.println("Listening enrollment topic");
-        courseService.processEnrollmentRequest(record);
+        courseService.processEnrollmentRequest(enrollmentDropRequest);
     }
 }

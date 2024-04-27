@@ -2,7 +2,6 @@ package com.courseselection.courseservice.service;
 
 import com.courseselection.courseservice.model.Professor;
 import com.courseselection.kafkatypes.ProfessorEvent;
-import org.apache.avro.generic.GenericData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -15,15 +14,14 @@ public class KafkaProfessorListener {
     private ProfessorService professorService;
 
     @KafkaListener(id = "courseServiceProfessorConsumer", topics = topic, groupId = "course-service", autoStartup = "true")
-    public void listen(GenericData.Record record) {
+    public void listen(ProfessorEvent professorEvent) {
         System.out.println("listening professors topic");
-        GenericData.Record kafkaProfessor = (GenericData.Record) record.get("professor");
-        switch (record.get("operation").toString()) {
+        switch (professorEvent.getOperation().toString()) {
             case "CREATE":
-                professorService.addProfessor(kafkaProfessor);
+                professorService.addProfessor(professorEvent.getProfessor());
                 break;
             case "UPDATE":
-                professorService.updateProfessor(kafkaProfessor);
+                professorService.updateProfessor(professorEvent.getProfessor());
                 break;
         }
     }

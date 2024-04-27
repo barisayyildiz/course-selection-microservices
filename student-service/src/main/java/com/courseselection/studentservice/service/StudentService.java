@@ -1,6 +1,7 @@
 package com.courseselection.studentservice.service;
 
 import com.courseselection.kafkatypes.EnrollmentDropRequest;
+import com.courseselection.kafkatypes.EnrollmentDropResponse;
 import com.courseselection.studentservice.dtos.StudentResponseDto;
 import com.courseselection.studentservice.dtos.UpdateStudentDto;
 import com.courseselection.studentservice.model.Enrollment;
@@ -9,7 +10,6 @@ import com.courseselection.studentservice.model.Student;
 import com.courseselection.studentservice.repository.EnrollmentRepository;
 import com.courseselection.studentservice.repository.StudentRepository;
 import com.courseselection.studentservice.utility.Constants;
-import org.apache.avro.generic.GenericData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -102,13 +102,13 @@ public class StudentService {
         return true;
     }
 
-    public void processEnrollmentResponse(GenericData.Record record) {
-        Optional<Student> student = studentRepository.findById((Integer) record.get("student_id"));
+    public void processEnrollmentResponse(EnrollmentDropResponse enrollmentDropResponse) {
+        Optional<Student> student = studentRepository.findById(enrollmentDropResponse.getStudentId());
 
-        String type = record.get("type").toString();
-        String status = record.get("status").toString();
-        Integer courseId = (Integer) record.get("course_id");
-        Integer studentId = (Integer) record.get("student_id");
+        String type = enrollmentDropResponse.getType().toString();
+        String status = enrollmentDropResponse.getStatus().toString();
+        Integer courseId = enrollmentDropResponse.getCourseId();
+        Integer studentId = enrollmentDropResponse.getStudentId();
 
         if(student.isEmpty()) {
             System.out.println("Student not found");
@@ -121,8 +121,8 @@ public class StudentService {
                             .id(
                                     EnrollmentId
                                             .builder()
-                                            .studentId((Integer) record.get("student_id"))
-                                            .courseId((Integer) record.get("course_id"))
+                                            .studentId(studentId)
+                                            .courseId(courseId)
                                             .build()
                             )
                             .student(durableStudent)
@@ -130,7 +130,7 @@ public class StudentService {
                     enrollmentRepository.save(enrollment);
                     System.out.println("Student enrolled to the course");
                 } else {
-                    System.out.println("Student enrollment failed: " + record.get("message"));
+                    System.out.println("Student enrollment failed: " + enrollmentDropResponse.getMessage());
                 }
             } else {
                 if(status.equals("ACCEPTED")) {

@@ -1,6 +1,6 @@
 package com.courseselection.courseservice.service;
 
-import org.apache.avro.generic.GenericData;
+import com.courseselection.kafkatypes.CourseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -13,17 +13,16 @@ public class KafkaCourseListener {
     private CourseService courseService;
 
     @KafkaListener(id = "courseServiceCourseConsumer", topics = topic, groupId = "course-service", autoStartup = "true")
-    public void listen(GenericData.Record record) {
-        GenericData.Record kafkaCourse = (GenericData.Record) record.get("course");
-        switch (record.get("operation").toString()) {
+    public void listen(CourseEvent courseEvent) {
+        switch (courseEvent.getOperation().toString()) {
             case "CREATE":
-                courseService.addCourse(kafkaCourse);
+                courseService.addCourse(courseEvent.getCourse());
                 break;
             case "UPDATE":
-                courseService.updateCourse(kafkaCourse);
+                courseService.updateCourse(courseEvent.getCourse());
                 break;
             case "DELETE":
-                courseService.deleteCourse(kafkaCourse);
+                courseService.deleteCourse(courseEvent.getCourse());
                 break;
         }
     }
