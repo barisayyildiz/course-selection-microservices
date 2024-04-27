@@ -12,10 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.logging.Logger;
+
 @Validated
 @RestController
 @RequestMapping("/api")
 public class StudentController {
+    private static final Logger logger = Logger.getLogger(StudentController.class.getName());
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -23,6 +26,7 @@ public class StudentController {
 
     @GetMapping("/student")
     public ResponseEntity<StudentResponseDto> getCurrentStudent() {
+        logger.info("GET /api/student");
         return new ResponseEntity<StudentResponseDto>(studentService.getCurrentStudent(), HttpStatus.OK);
     }
 
@@ -30,12 +34,14 @@ public class StudentController {
     public ResponseEntity<StudentResponseDto> updateStudent(
             @Valid @RequestBody UpdateStudentDto updateStudentDto
     ) {
+        logger.info("PUT /api/student");
         StudentResponseDto savedStudent = studentService.updateStudent(updateStudentDto);
         return new ResponseEntity<StudentResponseDto>(savedStudent, HttpStatus.OK);
     }
 
     @PostMapping("/enroll")
     public ResponseEntity<EnrollmentResponseDto> enrollCourse(@RequestParam Integer course_id) {
+        logger.info("POST /api/enroll?course_id=" + course_id);
         if(studentService.enrollCourse(course_id)) {
             return new ResponseEntity<>(
                     EnrollmentResponseDto.builder().message("Enrollment request send").build(),
@@ -51,6 +57,7 @@ public class StudentController {
 
     @PostMapping("/drop")
     public ResponseEntity<EnrollmentResponseDto> dropCourse(@RequestParam Integer course_id) {
+        logger.info("POST /api/drop?course_id=" + course_id);
         if(studentService.dropCourse(course_id)) {
             return new ResponseEntity<>(
                     EnrollmentResponseDto.builder().message("Drop request send").build(),

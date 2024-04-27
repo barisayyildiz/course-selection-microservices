@@ -7,13 +7,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class ProfessorService {
+    private static final Logger logger = Logger.getLogger(ProfessorService.class.getName());
     @Autowired
     private ProfessorRepository professorRepository;
 
     public void addProfessor(com.courseselection.kafkatypes.Professor kafkaProfessor) {
+        logger.info("Adding the professor: " + kafkaProfessor);
         Professor professor = Professor
                 .builder()
                 .id(kafkaProfessor.getId())
@@ -23,6 +26,7 @@ public class ProfessorService {
     }
 
     public void updateProfessor(com.courseselection.kafkatypes.Professor kafkaProfessor) {
+        logger.info("Updating the professor: " + kafkaProfessor);
         Integer id = kafkaProfessor.getId();
         Optional<Professor> optionalProfessor = professorRepository.findById(id);
         if(optionalProfessor.isPresent()) {

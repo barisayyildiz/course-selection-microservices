@@ -6,9 +6,11 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
 
 @Service
 public class KafkaProducer {
+    private static final Logger logger = Logger.getLogger(KafkaProducer.class.getName());
     private static final String TOPIC = "course-operation";
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
@@ -18,8 +20,9 @@ public class KafkaProducer {
 
         future.whenComplete((result, ex) -> {
             if (ex == null) {
-                System.out.println("produced event to topic " + TOPIC);
+                logger.info("Produced event to topic " + topic);
             } else {
+                logger.severe("Error during producing event to topic " + topic + ", " + ex.getMessage());
                 ex.printStackTrace(System.out);
             }
         });

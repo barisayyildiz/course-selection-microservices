@@ -18,9 +18,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private static final Logger logger = Logger.getLogger(JwtAuthenticationFilter.class.getName());
     private final HandlerExceptionResolver handlerExceptionResolver;
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
@@ -45,11 +47,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        logger.info("Checking the credentials");
 
         final String authHeader = request.getHeader("Authorization");
 
         try {
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                logger.severe("Jwt is not provided");
                 throw new AccessDeniedException("Jwt is not provided");
             }
 
@@ -75,6 +79,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
+            logger.severe("Exception caught: " + exception.getMessage());
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }

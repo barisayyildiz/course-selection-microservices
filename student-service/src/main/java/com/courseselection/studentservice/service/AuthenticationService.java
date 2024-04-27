@@ -10,8 +10,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.logging.Logger;
+
 @Service
 public class AuthenticationService {
+    private static final Logger logger = Logger.getLogger(AuthenticationService.class.getName());
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -20,6 +23,7 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     public Student signup(SignupRequestDto signupRequestDto) {
+        logger.info("Signup request has been made: " + signupRequestDto);
         Student student = Student
                 .builder()
                 .name(signupRequestDto.getName())
@@ -30,6 +34,7 @@ public class AuthenticationService {
     }
 
     public Student authenticate(LoginRequestDto input) {
+        logger.info("Login request has been made: " + input);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.getEmail(),

@@ -1,6 +1,7 @@
 package com.courseselection.professorservice.service;
 
 import com.courseselection.kafkatypes.ProfessorEvent;
+import com.courseselection.professorservice.controller.AuthenticationController;
 import com.courseselection.professorservice.dtos.LoginRequestDto;
 import com.courseselection.professorservice.dtos.SignupRequestDto;
 import com.courseselection.professorservice.model.Professor;
@@ -12,8 +13,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.logging.Logger;
+
 @Service
 public class AuthenticationService {
+    private static final Logger logger = Logger.getLogger(AuthenticationService.class.getName());
     @Autowired
     private ProfessorRepository professorRepository;
     @Autowired
@@ -25,6 +29,7 @@ public class AuthenticationService {
     private KafkaProducer kafkaProducer;
 
     public Professor signup(SignupRequestDto signupRequestDto) {
+        logger.info("Signup request has been made: " + signupRequestDto);
         Professor professor = Professor.builder()
                 .name(signupRequestDto.getName())
                 .email(signupRequestDto.getEmail())
@@ -44,6 +49,7 @@ public class AuthenticationService {
     }
 
     public Professor authenticate(LoginRequestDto input) {
+        logger.info("Login request has been made: " + input);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.getEmail(),

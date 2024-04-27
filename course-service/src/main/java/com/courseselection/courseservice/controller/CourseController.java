@@ -14,11 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 public class CourseController {
+    private static final Logger logger = Logger.getLogger(CourseController.class.getName());
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
@@ -31,6 +32,7 @@ public class CourseController {
             @RequestParam(value = "page") Integer pageNumber,
             @RequestParam(value = "count") Integer pageSize
     ) {
+        logger.info("GET /api/courses?page=" + pageNumber + "&count=" + pageSize);
         Page<CourseResponseDto> coursePage = courseService.findAllCourses(pageNumber-1, pageSize);
         ResponseDto<?> responseDto = ResponseDto
                 .builder()
@@ -38,6 +40,7 @@ public class CourseController {
                 .page(coursePage.getPageable().getPageNumber() + 1)
                 .size(coursePage.getPageable().getPageSize())
                 .build();
+        logger.info("GET /api/courses?page=" + pageNumber + "&count=" + pageSize + ", response: " + coursePage);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
@@ -45,6 +48,9 @@ public class CourseController {
     public ResponseEntity<List<Course>> searchByCourseName(
             @RequestParam("name") String name
     ) {
+        logger.info("GET /api/courses/search?name=" + name);
+        List<Course> courseList = courseRepository.searchByName(name);
+        logger.info("GET /api/courses/search?name=" + name + ", response: " + courseList.toString());
         return new ResponseEntity<>(courseService.searchCoursesByName(name), HttpStatus.OK);
     }
 

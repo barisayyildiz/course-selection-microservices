@@ -1,5 +1,6 @@
 package com.courseselection.professorservice.controller;
 
+import com.courseselection.professorservice.configuration.JwtAuthenticationFilter;
 import com.courseselection.professorservice.dtos.LoginRequestDto;
 import com.courseselection.professorservice.dtos.LoginResponseDto;
 import com.courseselection.professorservice.dtos.SignupRequestDto;
@@ -16,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.logging.Logger;
+
 @Validated
 @RequestMapping("/auth")
 @RestController
 public class AuthenticationController {
+    private static final Logger logger = Logger.getLogger(AuthenticationController.class.getName());
     @Autowired
     private AuthenticationService authenticationService;
     @Autowired
@@ -27,11 +31,13 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<Professor> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+        logger.info("POST /auth/signup");
         return new ResponseEntity<>(authenticationService.signup(signupRequestDto), HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+        logger.info("POST /auth/login");
         Professor authenticatedProfessor = authenticationService.authenticate(loginRequestDto);
 
         String jwtToken = jwtUtil.generateToken(authenticatedProfessor);

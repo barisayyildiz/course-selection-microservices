@@ -19,9 +19,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class ProfessorService {
+    private static final Logger logger = Logger.getLogger(ProfessorService.class.getName());
     @Autowired
     private ProfessorRepository professorRepository;
     @Autowired
@@ -34,6 +36,7 @@ public class ProfessorService {
     }
 
     public Professor updateProfessor(UpdateProfessorRequestDto updateProfessorRequestDto) {
+        logger.info("Updating the professor " + updateProfessorRequestDto);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Professor currentProfessor = (Professor) authentication.getPrincipal();
 

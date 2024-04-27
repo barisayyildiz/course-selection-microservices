@@ -6,7 +6,6 @@ import com.courseselection.courseservice.model.Professor;
 import com.courseselection.courseservice.repository.CourseRepository;
 import com.courseselection.courseservice.repository.ProfessorRepository;
 import com.courseselection.courseservice.utility.Constants;
-import com.courseselection.kafkatypes.CourseEvent;
 import com.courseselection.kafkatypes.EnrollmentDropRequest;
 import com.courseselection.kafkatypes.EnrollmentDropResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.logging.Logger;
 
 @Service
 public class CourseService {
+    private static final Logger logger = Logger.getLogger(CourseService.class.getName());
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
@@ -29,6 +29,7 @@ public class CourseService {
     private KafkaProducer kafkaProducer;
 
     public Page<CourseResponseDto> findAllCourses(Integer pageNumber, Integer pageSize) {
+        logger.info("Find courses on page: " + (pageNumber + 1) + ", with size: " + pageSize);
         return courseRepository.findAllCoursesByPage(PageRequest.of(pageNumber, pageSize));
     }
 
@@ -37,6 +38,7 @@ public class CourseService {
     }
 
     public void addCourse(com.courseselection.kafkatypes.Course kafkaCourse) {
+        logger.info("Adding the course: " + kafkaCourse.toString());
         Integer professorId = kafkaCourse.getProfessorId();
         Optional<Professor> durableProfessor = professorRepository.findById(professorId);
         if(durableProfessor.isPresent()) {
@@ -54,6 +56,7 @@ public class CourseService {
     }
 
     public void updateCourse(com.courseselection.kafkatypes.Course kafkaCourse) {
+        logger.info("Updating the course: " + kafkaCourse.toString());
         Integer professorId = kafkaCourse.getProfessorId();
         Optional<Professor> durableProfessor = professorRepository.findById(professorId);
         Optional<Course> optionalCourse = courseRepository.findById(
@@ -75,6 +78,7 @@ public class CourseService {
     }
 
     public void deleteCourse(com.courseselection.kafkatypes.Course kafkaCourse) {
+        logger.info("Deleting the course: " + kafkaCourse.toString());
         Optional<Course> optionalCourse = courseRepository.findById(
                 kafkaCourse.getId()
         );
@@ -83,6 +87,7 @@ public class CourseService {
 
     @Transactional
     public void processEnrollmentRequest(EnrollmentDropRequest enrollmentDropRequest) {
+        logger.info("Processing enrollment request: " + enrollmentDropRequest.toString());
         System.out.println("inside processEnrollmentRequest");
 
         int courseId = enrollmentDropRequest.getCourseId();

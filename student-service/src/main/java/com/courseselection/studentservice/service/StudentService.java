@@ -16,9 +16,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class StudentService {
+    private static final Logger logger = Logger.getLogger(StudentService.class.getName());
     @Autowired
     StudentRepository studentRepository;
     @Autowired
@@ -38,6 +40,7 @@ public class StudentService {
     }
 
     public StudentResponseDto updateStudent(UpdateStudentDto updateStudentDto) {
+        logger.info("Updating the student: " + updateStudentDto);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Student student = (Student) authentication.getPrincipal();
 
@@ -53,6 +56,7 @@ public class StudentService {
     }
 
     public Boolean enrollCourse(Integer courseId) {
+        logger.info("Enrolling to course: " + courseId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Student student = (Student) authentication.getPrincipal();
 
@@ -64,6 +68,7 @@ public class StudentService {
         );
 
         if(durableEnrollment.isPresent()) {
+            logger.info("Course is not found : " + courseId);
             return false;
         }
 
@@ -78,6 +83,7 @@ public class StudentService {
     }
 
     public Boolean dropCourse(Integer courseId) {
+        logger.info("Dropping the course: " + courseId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Student student = (Student) authentication.getPrincipal();
 
@@ -89,6 +95,7 @@ public class StudentService {
         );
 
         if(durableEnrollment.isEmpty()) {
+            logger.info("Course is not found : " + courseId);
             return false;
         }
 
@@ -103,6 +110,7 @@ public class StudentService {
     }
 
     public void processEnrollmentResponse(EnrollmentDropResponse enrollmentDropResponse) {
+        logger.info("Processing enrollment response: " + enrollmentDropResponse);
         Optional<Student> student = studentRepository.findById(enrollmentDropResponse.getStudentId());
 
         String type = enrollmentDropResponse.getType().toString();
