@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.logging.Logger;
 
 @Validated
-@RequestMapping("/auth")
+@RequestMapping("/auth/professor")
 @RestController
 public class AuthenticationController {
     private static final Logger logger = Logger.getLogger(AuthenticationController.class.getName());

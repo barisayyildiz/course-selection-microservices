@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 @Validated
-@RequestMapping("/api")
+@RequestMapping("/api/professor")
 @RestController
 public class ProfessorController {
     private static final Logger logger = Logger.getLogger(ProfessorController.class.getName());
@@ -31,7 +31,7 @@ public class ProfessorController {
     @Autowired
     private ServiceUtility serviceUtility;
 
-    @GetMapping("/professor")
+    @GetMapping("/")
     public ResponseEntity<UserProfileResponseDTO> getProfessorInformation() {
         logger.info("GET /api/professor");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -40,7 +40,7 @@ public class ProfessorController {
         return new ResponseEntity<>(serviceUtility.hideUserDetails(currentProfessor), HttpStatus.OK);
     }
 
-    @PutMapping("/professor")
+    @PutMapping("/")
     public ResponseEntity<UserProfileResponseDTO> updateProfessorInformation(
             @Valid @RequestBody UpdateProfessorRequestDto updateProfessorRequestDto
     ) {

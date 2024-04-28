@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 @Validated
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/student")
 public class StudentController {
     private static final Logger logger = Logger.getLogger(StudentController.class.getName());
     @Autowired
@@ -24,13 +24,13 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping("/student")
+    @GetMapping("/")
     public ResponseEntity<StudentResponseDto> getCurrentStudent() {
         logger.info("GET /api/student");
         return new ResponseEntity<StudentResponseDto>(studentService.getCurrentStudent(), HttpStatus.OK);
     }
 
-    @PutMapping("/student")
+    @PutMapping("/")
     public ResponseEntity<StudentResponseDto> updateStudent(
             @Valid @RequestBody UpdateStudentDto updateStudentDto
     ) {

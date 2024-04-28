@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: course
+          predicates:
+            - Path=/api/courses/**
+          uri: http://localhost:8000
+        - id: professor
+          predicates:
+            - Path=/api/professor/**
+          uri: http://localhost:8001
+        - id: professor-auth
+          predicates:
+            - Path=/auth/professor/**
+          uri: http://localhost:8001
+        - id: student
+          predicates:
+            - Path=/api/student/**
+          uri: http://localhost:8002
+        - id: student-auth
+          predicates:
+            - Path=/auth/student/**
+          uri: http://localhost:8002
+  main:
+    web-application-type: reactive
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 8080
+
+authentication:
+  enabled: false
