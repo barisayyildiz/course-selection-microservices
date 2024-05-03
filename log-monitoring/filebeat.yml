@@ -1,0 +1,11 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/snap/docker/common/var-lib-docker/containers/*/*.log
+    fields_under_root: true
+    fields:
+      type: docker
+
+output.logstash:
+  hosts: ["logstash:5044"]

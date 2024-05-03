@@ -12,6 +12,7 @@ services:
     volumes:
       - pgdatacourse:/var/lib/postgresql/data
       - ./course-service/src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
+    network_mode: host
   professor-db:
     container_name: professor_db
     image: postgres:latest
@@ -82,8 +83,67 @@ services:
       - 30092:8080
     depends_on:
       - redpanda-0
+
+# ======== LOG MONITORING
+
+  course-service-app:
+    container_name: course-service-app
+    build: ./course-service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - course-db
+      - redpanda-0
+    network_mode: host
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.17.0
+    volumes:
+      - ./log-monitoring/filebeat.yml:/usr/share/filebeat/filebeat.yml
+    restart: always
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.17.0
+    volumes:
+      - ./log-monitoring/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    restart: always
+    ports:
+      - "5044:5044"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.0
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+    depends_on:
+      - elasticsearch
+
+
 volumes:
   pgdatacourse: null
   pgdataprofessor: null
   pgdatastudent: null
   redpanda-0: null
+  esdata: null
