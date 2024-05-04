@@ -84,8 +84,6 @@ services:
     depends_on:
       - redpanda-0
 
-# ======== LOG MONITORING
-
   course-service-app:
     container_name: course-service-app
     build: ./course-service
@@ -95,6 +93,8 @@ services:
       - course-db
       - redpanda-0
     network_mode: host
+
+# ======== LOG MONITORING
 
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.17.0
