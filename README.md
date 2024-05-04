@@ -23,6 +23,7 @@ The Course Service handles everything about courses: names, codes, professors, c
 ### professor-service
 The Professor Service takes care of everything related to professors: signing up, logging in, updating profiles, and managing the courses they teach. It ensures secure access to protected endpoints by implementing authentication using JWT tokens.
 
+#### Endpoints
 - POST /auth/professor/signup: Registers a new professor.
 - POST /auth/professor/login: Logs in a professor and returns a JWT token.
 - GET /api/professor: Retrieves the profile information of the logged-in professor.
