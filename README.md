@@ -70,9 +70,9 @@ docker compose up
 ```
 
 ### Swagger
-- Course Service: http://localhost:8000/api/course/docs
-- Professor Service: http://localhost:8001/api/professor/docs
-- Student Service: http://localhost:8002/api/student/docs
+- Course Service: http://localhost:8000/swagger-ui/index.html
+- Professor Service: http://localhost:8001/swagger-ui/index.html
+- Student Service: http://localhost:8002/swagger-ui/index.html
 
 ### Kibana
 http://localhost:5601
