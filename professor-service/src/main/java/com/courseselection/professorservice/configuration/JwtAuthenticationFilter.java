@@ -18,7 +18,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
+
+import static com.courseselection.professorservice.configuration.SecurityConfiguration.WHITE_LIST_URL;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -43,7 +47,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        if(request.getRequestURI().startsWith("/auth/")) {
+        if(
+                request.getRequestURI().startsWith("/auth/") ||
+                request.getRequestURI().startsWith("/swagger-ui") ||
+                request.getRequestURI().startsWith("/v3/api-docs")
+        ) {
             filterChain.doFilter(request, response);
             return;
         }

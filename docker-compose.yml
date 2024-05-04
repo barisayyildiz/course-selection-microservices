@@ -84,15 +84,15 @@ services:
     depends_on:
       - redpanda-0
 
-  course-service-app:
-    container_name: course-service-app
-    build: ./course-service
-    ports:
-      - "8000:8000"
-    depends_on:
-      - course-db
-      - redpanda-0
-    network_mode: host
+#  course-service-app:
+#    container_name: course-service-app
+#    build: ./course-service
+#    ports:
+#      - "8000:8000"
+#    depends_on:
+#      - course-db
+#      - redpanda-0
+#    network_mode: host
 
 # ======== LOG MONITORING
 
