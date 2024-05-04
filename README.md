@@ -2,6 +2,10 @@
 
 The Course Selection Application is a microservice-based system designed to streamline the process of course selection for students and management of courses by professors. It follows a microservice architecture and utilizes Kafka brokers for inter-service communication.
 
+## Architecture
+![image](https://github.com/barisayyildiz/course-selection-microservices/assets/37713845/33cd0e86-1530-4991-ac2d-0db96e844a01)
+
+
 ## Tech Stack
 - Java
 - Spring Boot
