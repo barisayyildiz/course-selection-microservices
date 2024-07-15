@@ -1,8 +1,13 @@
-FROM openjdk:21-jdk
+# the base image
+FROM amazoncorretto:21
 
-WORKDIR /app
+# the JAR file path
+ARG JAR_FILE=target/*.jar
 
-COPY target/course-service-0.0.1-SNAPSHOT.jar /app/course-service.jar
+# Copy the JAR file from the build context into the Docker image
+COPY ${JAR_FILE} application.jar
 
-EXPOSE 8080
-CMD ["java", "-jar", "/app/course-service.jar"]
+CMD apt-get update -y
+
+# Set the default command to run the Java application
+ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/application.jar"]

@@ -1,6 +1,6 @@
 services:
   course-db:
-    container_name: course_db
+    container_name: course-db
     image: postgres:latest
     restart: always
     ports:
@@ -12,9 +12,23 @@ services:
     volumes:
       - pgdatacourse:/var/lib/postgresql/data
       - ./course-service/src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
-    network_mode: host
+    networks:
+      - course_network
+
+  course-service-app:
+    container_name: course-service-app
+    build: ./course-service
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - course-db
+      - redpanda-0
+    networks:
+      - course_network
+
   professor-db:
-    container_name: professor_db
+    container_name: professor-db
     image: postgres:latest
     restart: always
     ports:
@@ -26,8 +40,26 @@ services:
     volumes:
       - pgdataprofessor:/var/lib/postgresql/data
       - ./professor-service/src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - professor_network
+
+  professor-service-app:
+    container_name: professor-service-app
+    build: ./professor-service
+    restart: always
+    ports:
+      - "8001:8001"
+      - "5005:5005"
+    depends_on:
+      - professor-db
+      - redpanda-0
+    networks:
+      - professor_network
+    environment:
+      _JAVA_OPTIONS: "-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+
   student-db:
-    container_name: student_db
+    container_name: student-db
     image: postgres:latest
     restart: always
     ports:
@@ -39,14 +71,29 @@ services:
     volumes:
       - pgdatastudent:/var/lib/postgresql/data
       - ./student-service/src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - student_network
+  
+  student-service-app:
+    container_name: student-service-app
+    build: ./student-service
+    restart: always
+    ports:
+      - "8002:8002"
+    depends_on:
+      - student-db
+      - redpanda-0
+    networks:
+      - student_network
+
   redpanda-0:
     command:
       - redpanda
       - start
       - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
-      - --advertise-kafka-addr internal://redpanda-0:9092,external://localhost:19092
+      - --advertise-kafka-addr internal://redpanda-0:9092,external://redpanda-0:19092
       - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
-      - --advertise-pandaproxy-addr internal://redpanda-0:8082,external://localhost:18082
+      - --advertise-pandaproxy-addr internal://redpanda-0:8082,external://redpanda-0:18082
       - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
       - --rpc-addr redpanda-0:33145
       - --advertise-rpc-addr redpanda-0:33145
@@ -62,6 +109,10 @@ services:
       - 18082:18082
       - 19092:19092
       - 19644:9644
+    networks:
+      - course_network
+      - professor_network
+      - student_network
   console:
     container_name: redpanda-console
     image: docker.redpanda.com/redpandadata/console:v2.4.5
@@ -81,18 +132,12 @@ services:
             urls: ["http://redpanda-0:9644"]
     ports:
       - 30092:8080
+    networks:
+      - course_network
+      - professor_network
+      - student_network
     depends_on:
       - redpanda-0
-
-#  course-service-app:
-#    container_name: course-service-app
-#    build: ./course-service
-#    ports:
-#      - "8000:8000"
-#    depends_on:
-#      - course-db
-#      - redpanda-0
-#    network_mode: host
 
 # ======== LOG MONITORING
 
@@ -140,6 +185,13 @@ services:
     depends_on:
       - elasticsearch
 
+networks:
+  course_network:
+    driver: bridge
+  professor_network:
+    driver: bridge
+  student_network:
+    driver: bridge
 
 volumes:
   pgdatacourse: null
@@ -147,3 +199,4 @@ volumes:
   pgdatastudent: null
   redpanda-0: null
   esdata: null
+
