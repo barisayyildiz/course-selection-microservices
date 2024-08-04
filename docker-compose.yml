@@ -24,6 +24,17 @@ services:
     depends_on:
       - course-db
       - redpanda-0
+      - course-service-redis
+    networks:
+      - course_network
+
+  course-service-redis:
+    container_name: course-service-redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+    - redisdatacourse:/data
     networks:
       - course_network
 
@@ -223,6 +234,7 @@ networks:
     driver: bridge
 
 volumes:
+  redisdatacourse: null
   pgdatacourse: null
   pgdataprofessor: null
   pgdatastudent: null
