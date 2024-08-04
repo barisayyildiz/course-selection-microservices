@@ -185,6 +185,35 @@ services:
     depends_on:
       - elasticsearch
 
+# ======== API Gateway
+  gateway:
+    container_name: course-selection-api-gateway
+    build: ./apigateway
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - service-discovery
+    networks:
+      - course_network
+      - professor_network
+      - student_network
+  
+  service-discovery:
+    container_name: course-selection-eureka-server
+    build: ./eureka-server
+    restart: always
+    ports:
+      - "8761:8761"
+    depends_on:
+      - course-service-app
+      - professor-service-app
+      - student-service-app
+    networks:
+      - course_network
+      - professor_network
+      - student_network
+
 networks:
   course_network:
     driver: bridge
