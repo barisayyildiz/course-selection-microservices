@@ -1,5 +1,6 @@
 package com.courseselection.courseservice.controller;
 
+import com.courseselection.courseservice.annotation.RateLimiter;
 import com.courseselection.courseservice.dto.CourseResponseDto;
 import com.courseselection.courseservice.dto.ResponseDto;
 import com.courseselection.courseservice.model.Course;
@@ -28,6 +29,7 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping("/api/courses")
+    @RateLimiter
     public ResponseEntity<ResponseDto<?>> getAllCourses(
             @RequestParam(value = "page") Integer pageNumber,
             @RequestParam(value = "count") Integer pageSize
