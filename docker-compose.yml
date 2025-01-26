@@ -97,6 +97,8 @@ services:
     networks:
       - student_network
 
+# ======== KAFKA
+
   redpanda-0:
     command:
       - redpanda
